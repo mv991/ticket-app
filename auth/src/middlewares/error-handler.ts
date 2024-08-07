@@ -8,12 +8,16 @@ export const errorHandler = (
   next: NextFunction
 ) => {
   if (err instanceof RequestValidationError) {
-    console.log("Handling error");
+    return res.status(400).send({ errors: err.serializeErrors() });
   }
   if (err instanceof DatabaseConnectionError) {
-    console.log("Handling error db");
+    return res.status(500).send({ errors: [{ message: err.reason }] });
   }
-  res.status(400).send({
-    message: err.message,
+  res.status(500).send({
+    errors: [
+      {
+        message: "Something went weong",
+      },
+    ],
   });
 };
